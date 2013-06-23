@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head> <title>{% block title %}MyBlog{% endblock %}</title> 
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-responsive.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-responsive.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+<style type="text/css">
+    body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+</style>
+</head>
+
+<body>
+    {% block nav-global %}
+                <div class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="navbar-inner">
+                        <a class="brand" href="#">SimpleBlog</a>
+                    <!-- MENU -->
+                    <ul class="nav">
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                        <li><a href="{% url 'admin:blog_post_add' %}">Add post</a></li>
+                    {% endif %}
+                    </ul>
+                    </div>
+                </div>
+    {% endblock %}
+
+    <!--end of navbar -->
+    <!-- sidebar goes here -->
+
+    <div class="alert alert-info">
+<strong>Heads up</strong>  This appears to be one of the most read articles on this blog, which means <a href="/bookmarks/bootstrap">Bootstrap, from Twitter</a> is very popular among Django developers.  You should check out the <a href="/templates/">Project Templates</a> section for more bootstrap enabled Django goodness.  Also be sure to check out <a href="/blog/tag/bootstrap.html">other articles tagged</a> with bootstrap content.  If you are looking for Django packages to easily integrate bootstrap, be sure to check out these <a href="/packages/tag/bootstrap.html">Python packages</a> which can be used in your Django projects.
+</div>
+    <div id="sidebar"> {% block sidebar %} {% endblock %} </div>
+    <div id="container">     
+        <div class="container-fluid">
+            <div class="row-fluid">
+               
+                {% block content %}{% endblock %}
+               
+            </div>
+        </div>
+        <footer>
+        <p>&copy; Company 2013</p>
+      </footer>
+    </div>
+{% load staticfiles %}
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

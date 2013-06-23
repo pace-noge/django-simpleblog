@@ -1,0 +1,57 @@
+{% extends "pbase.html" %}
+{% block sidebar %}
+    
+
+{% endblock %}
+{% block content %}
+    <div class="row-fluid">
+    <div class="span5">
+
+        <!-- Albums  -->
+        <ul>
+                <div class="title">{{ album.title }} ({{ album.image_set.count }} images)</div>
+                View:
+        <a href="{% url 'photo:album' album.pk 'thumbnails' %}">thumbnails</a>
+        <a href="{% url 'photo:album' album.pk 'full' %}">full</a>&nbsp;
+                <ul class="thumbnails">
+
+                    {% for img in images.object_list %}
+                    {% if view == 'full' %}
+                    <li class="span8">
+                        <a href="{% url 'photo:image' img.pk %}"><img border="0" alt=""
+                            src="{{ media_url }}{{ img.thumbnail2.name }}" class="img-rounded" data-src="holder.js/300x200" {% if img.width > 900 %}width="900"{% endif %} /></a>
+                    </li>
+                    {% else %}
+                    <li class="span4">
+                        <a href="{% url 'photo:image' img.pk %}"><img border="0" alt=""
+                            src="{{ media_url }}{{ img.thumbnail2.name }}" class="img-rounded" data-src="holder.js/300x200"/></a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+          
+        </ul>
+
+        <!-- Next/Prev page links  -->
+        {% if albums.object_list and albums.paginator.num_pages > 1 %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if albums.has_previous %}
+                    <a href= "?page={{ albums.previous_page_number }}">previous &lt;&lt; </a>
+                {% endif %}
+
+                <span class="current">
+                    &nbsp;Page {{ albums.number }} of {{ albums.paginator.num_pages }}
+                </span>
+
+                {% if albums.has_next %}
+                    <a href="?page={{ albums.next_page_number }}"> &gt;&gt; next</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

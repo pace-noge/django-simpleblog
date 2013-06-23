@@ -1,0 +1,54 @@
+{% extends "bbase.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block sidebar %}
+    {% for month in months %}
+        {% ifchanged month.0 %} {{ month.0 }} <br /> {% endifchanged %}
+        <li><a href="{% url 'post:month' month.0 month.1 %}">{{ month.2 }} - {{ month.0 }}</a></li>
+    {% endfor %}
+
+{% endblock %}
+    
+{% block content %}
+    <div class="main">
+
+        <!-- Posts  -->
+        <ul>
+            {% for post in post_list %}
+                <div class="title"><legend>{{ post.title }}</legend></div>
+                <ul>
+                    <div class="time">{{ post.created }}</div>
+                    <div class="body">{{ post.body|linebreaks }}</div>
+                    <div class="comment"><a href="{% url 'post:post' post.id %}">Comments ({{ post.comment_set.count }})</a></div>
+                </ul>
+            {% endfor %}
+        </ul>
+
+        <!-- Next/Prev page links  -->
+        {% if not archive and posts.object_list and posts.paginator.num_pages > 1 %}
+        <div class="pagination pagination-small">
+            <ul>
+                {% if posts.has_previous %}
+                    <li><a href= "?page={{ posts.previous_page_number }}">next</a></li>
+                {% endif %}
+
+                
+                <li class="active">&nbsp;Page {{ posts.number }} of {{ posts.paginator.num_pages }}</li>
+                
+
+                {% if posts.has_next %}
+                    <li><a href="?page={{ posts.next_page_number }}">prev</a></li>
+                {% endif %}
+            </ul>
+           
+        </div>
+        {% endif %}
+
+    </div>
+    
+
+{% endblock %}
+

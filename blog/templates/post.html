@@ -1,0 +1,58 @@
+{% extends "bbase.html" %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block sidebar %}
+
+    <li><a href="{% url 'main' %}">Home</a></li>
+{% endblock %}
+{% block content %}
+   
+    <div class="title">{{ post.title }}</div>
+               
+    <div class="time">{{ post.created }}</div>
+    <div class="body">{{ post.body|linebreaks }}</div>
+           
+    <!-- comments -->
+    {% if comments %}
+        <p>Comments;</p>
+    {% endif %}
+    <form action="{% url 'post:delete_comment' post.pk %}" method="post">{% csrf_token %}
+    {% for comment in comments %}
+        <div class="comment">
+            <span>{{ comment.created }} | {{ comment.author }}</span>
+            <span>{{ comment.body|linebreaks }}</span>
+            {% if user.is_staff %}
+                <input type="checkbox" name="delete" value="{{ comment.pk }}">
+                <a href="{% url 'post:delete_comment' post.pk comment.id %}">Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% if user.is_staff and comments %}
+        <input type="submit" value="Delete Comment" class="btn btn-primary" />
+    {% endif %}
+</form>
+    
+    <!-- comment form -->
+    <form action="{% url 'post:add_comment' post.id %}" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <legend>Comment</legend>
+        <div class="control-group">
+            <label class="control-label" for="inputName">Name</label>
+            <div class="controls">
+                {{ form.author }}
+            </div>
+        <div class="control-group">
+            <label class="control-label" for="inputComment">Comment</label>
+            <div class="controls">
+                {{ form.body }}
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" value="Post Comment" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>     
+{% endblock %}
